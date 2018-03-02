@@ -59,6 +59,15 @@ CREATE TABLE Showing (
 	FOREIGN KEY (datetime) REFERENCES TimeSlots
 );
 
+CREATE TABLE Users (
+        uid             SERIAL,
+        username        VARCHAR(50) NOT NULL,
+        password        VARCHAR(50) NOT NULL,
+        email           VARCHAR(50) NOT NULL,
+        PRIMARY KEY (uid),
+        UNIQUE          (username, email)
+);
+
 CREATE TABLE Book (
 	movieID 	INTEGER,
 	theaterID 	INTEGER,
@@ -71,15 +80,6 @@ CREATE TABLE Book (
 		ON DELETE CASCADE
 		ON UPDATE CASCADE,
 	FOREIGN KEY (movieID, theaterID, datetime) REFERENCES Showing
-);
-
-CREATE TABLE Users (
-	uid     	SERIAL,
-	username	VARCHAR(50) NOT NULL,
-	password	VARCHAR(50) NOT NULL,
-	email   	VARCHAR(50) NOT NULL,
-	PRIMARY KEY (uid),
-	UNIQUE  	(username, email)
 );
 
 CREATE TABLE Review (
@@ -114,7 +114,7 @@ CREATE TABLE Contain (
 	FOREIGN KEY (movieID) REFERENCES Movies
     	ON DELETE CASCADE
     	ON UPDATE CASCADE,
-	FOREIGN KEY (uid, name) REFERENCES Collections
+	FOREIGN KEY (uid, name) REFERENCES CreateCollections
     	ON DELETE CASCADE
     	ON UPDATE CASCADE
 );
