@@ -1,13 +1,7 @@
-<html>
-  <style>
-    body{ 
-      font-size: 15pt;
-      font-family: arial;
-    }
-  </style>
+{% extends "base.html" %}
+{% block title %} genNYC {% endblock %}
+{% block body %}
 
-
-<body>
   <h1>Some famous Computer Scientists</h1>
   <div>{{data}}</div>
 
@@ -23,7 +17,4 @@
 <p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
 </form>
 
-</body>
-
-
-</html>
+{% endblock %}
