@@ -1,1 +1,18 @@
-hello, I am another file!
+{% extends "base.html" %}
+{% block title %} GoodViews Computer Scientists {% endblock %}
+{% block body %}
+
+<h1>Some famous Computer Scientists</h1>
+<div>{{data}}</div>
+
+<div>
+  {% for n in data %}
+  <div>{{n}}</div>
+  {% endfor %}
+</div>
+
+<form method="POST" action="/add">
+<p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
+</form>
+
+{% endblock %}

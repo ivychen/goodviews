@@ -65,7 +65,8 @@ CREATE TABLE Users (
         password        VARCHAR(50) NOT NULL,
         email           VARCHAR(50) NOT NULL,
         PRIMARY KEY (uid),
-        UNIQUE          (username, email)
+        UNIQUE          username,
+				UNIQUE					email
 );
 
 CREATE TABLE Book (
