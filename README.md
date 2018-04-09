@@ -2,6 +2,17 @@
 
 A cinema database and discussion platform.
 
+## Project 1 Part 3
+
+TODO:
+A description of the parts of your original proposal in Part 1 that you implemented, the parts you did not (which hopefully is nothing or something very small), and possibly new features that were not included in the proposal and that you implemented anyway. If you did not implement some part of the proposal in Part 1, explain why.
+Briefly describe two of the web pages that require (what you consider) the most interesting database operations in terms of what the pages are used for, how the page is related to the database operations (e.g., inputs on the page are used in such and such way to produce database operations that do such and such), and why you think they are interesting.
+
+1. The PostgreSQL account where DB resides: ic2389
+2. URL of web application: [http://35.185.29.235:8111](http://35.185.29.235:8111)
+3. Features implemented:
+    - User login/registration
+
 
 03-01-2018:
 

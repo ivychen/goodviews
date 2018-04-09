@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} Register {% endblock %}
+{% block body %}
+<div class="mdl-modal row z-depth-1">
+
+  <h2> Register </h2>
+
+  <form class="col s12" action="" method="POST" id="register">
+    <div class="input-field col s12">
+      <label for="username">Username</label>
+      <input type="text" name="username" required>
+    </div>
+
+    <div class="input-field col s12">
+      <label for="password">Password</label>
+      <input type="password" name="password" required>
+    </div>
+
+    <div class="input-field col s12">
+      <label for="email">Email</label>
+      <input type="email" name="email" required>
+    </div>
+
+    <button class="btn waves-effect waves-light" type="submit">Register</button>
+  </form>
+
+  {% if error %}
+  <p class="error"><strong>Error:</strong> {{ error }}
+  {% endif %}
+
+  </div>
+
+  {% endblock %}
