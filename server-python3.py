@@ -15,12 +15,17 @@ from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
+# Import custom modules
+from user_class import User
+
+# Create app
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
 
 # Enable flask-login
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 #
 # The following is a dummy URI that does not connect to a valid database. You will need to modify it to connect to your Part 2 database in order to use the data.
@@ -173,10 +178,49 @@ def add():
   g.conn.execute('INSERT INTO test(name) VALUES (%s)', name)
   return redirect('/')
 
+# === LOGIN ====
+@login_manager.user_loader
+def load_user(id):
+  return User.query.get(int(id))
 
 @app.route('/login')
 def login():
   pass
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+  if request.method == 'GET':
+    return render_template('register.html')
+
+  error = None
+
+  if request.method == 'POST':
+    try:
+      new_user = User(request.form['username'],
+                      request.form['password'],
+                      request.form['email'])
+
+    except ValueError:
+      error = "Username or Password is empty"
+
+    if (is_registered_user(new_user)):
+      login_user(new_user)
+      return redirect(url_for('/'))
+    else:
+      error = "Username taken."
+
+  return render_template('register.html', error=error)
+
+def is_registered_user(user):
+    cursor = g.conn.execute('SELECT * FROM Users U WHERE U.username="' + user.username + '"')
+    for res in cursor:
+        print(list(cursor))
+    data = cursor.fetchone()
+
+    if data:
+      return True
+    else:
+      return False
 
 
 @app.route('/logout')
