@@ -22,7 +22,13 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
-<body>
+
+{% if request.path == "/login" or request.path == "/register" or request.path == "/" %}
+	<body>
+{% else %}
+	<body style="background: #fff;">
+{% endif %}
+
   <!-- Main content -->
 	<div class="container">
 		{% block body %}{% endblock %}

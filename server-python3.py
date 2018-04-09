@@ -112,8 +112,9 @@ def index():
 
     # DEBUG: this is debugging code to see what request looks like
     print(request.args)
+    print("Index path:", request.path)
 
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         return redirect(url_for('main'))
 
     # render_template looks in the templates/ folder for files.
