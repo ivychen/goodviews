@@ -181,7 +181,7 @@ def add():
 # === LOGIN ====
 @login_manager.user_loader
 def load_user(username):
-    cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username='" + username + "'")
+    cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username=%s", username)
     data = cursor.fetchone()
     cursor.close()
 
@@ -193,7 +193,7 @@ def load_user(username):
     return User(data[1], data[2], data[3], data[0])
 
 def authenticate_user(user):
-    cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username='" + user.username + "'")
+    cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username=%s", user.username)
     data = cursor.fetchone()
     cursor.close()
 
@@ -238,21 +238,18 @@ def register():
             login_user(new_user)
             return redirect('/')
         else:
-            error = "Username taken."
+            error = "Username or email taken."
 
     return render_template('register.html', error=error)
 
 def register_user(user):
-    cursor = g.conn.execute('INSERT INTO Users (username, password, email) VALUES (%s, %s, %s)', user.username, user.password, user.email)
-
+    cursor = g.conn.execute("INSERT INTO Users (username, password, email) VALUES (%s, %s, %s)", (user.username, user.password, user.email))
+    
     cursor.close()
 
 def is_registered_user(user):
-    cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username='%s'", user.username)
-    for res in cursor:
-        print(list(cursor))
+    cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username=%s", (user.username, ))
     data = cursor.fetchone()
-
     cursor.close()
 
     if data:
