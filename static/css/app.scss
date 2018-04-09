@@ -2,13 +2,16 @@
 // Need to compile down to app.css
 //
 // === COLORS ===
-$GVBLUE: #0097c7cc;
-$GVBLUE-DARK: #0D546B;
+// $GVBLUE: #0097c7cc;
+// $GVBLUE-DARK: #0D546B;
 $GVBLUE-DARK-T: #0D546Bcc;
 $GVBLACK: rgba(0, 0, 0, 0.8);
 $GVWHITE-OFF: #f1f1f1;
 $GVRED: #d32f2f;
 $GVBLUE-BRIGHT: #1a87ab;
+$GVPURPLE: #864cb3db;
+$GVPURPLE-DARK: #5e258adb;
+$GVPURPLE-GRAD: #050015b3;
 
 body, html {
   height: 100%;
@@ -19,7 +22,7 @@ body {
   font-family: 'Roboto', Helvetica, sans-serif;
   background: linear-gradient(
   rgba(255, 0, 0, 0.0),
-  #00264691
+  $GVPURPLE-GRAD
   ), url('../img/peanuts.jpg') no-repeat fixed center center;
   background-size: cover;
   display: flex;
@@ -41,19 +44,19 @@ body {
 button, input[type="submit"], .btn {
   font-size: 1.5rem !important;
   color: white;
-  background: $GVBLUE;
+  background: $GVPURPLE;
   box-shadow: none;
   border-radius: 2px;
 
   &:hover {
-    background: $GVBLUE-DARK;
+    background: $GVPURPLE-DARK;
   }
 }
 
 // Navigation
 nav {
   box-shadow: none;
-  background-color: $GVBLUE-DARK;
+  background-color: $GVPURPLE-DARK;
 
   .brand-logo {
     font-family: 'Allerta Stencil', Helvetica, sans-serif;
@@ -220,9 +223,9 @@ form {
     }
 
     .login {
-      background-color: $GVBLUE;
+      background-color: $GVPURPLE;
       &:hover {
-        background-color: $GVBLUE-DARK-T;
+        background-color: $GVPURPLE-DARK;
       }
     }
 

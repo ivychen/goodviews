@@ -6,7 +6,7 @@ body, html {
 
 body {
   font-family: 'Roboto', Helvetica, sans-serif;
-  background: linear-gradient(rgba(255, 0, 0, 0), #00264691), url("../img/peanuts.jpg") no-repeat fixed center center;
+  background: linear-gradient(rgba(255, 0, 0, 0), #050015b3), url("../img/peanuts.jpg") no-repeat fixed center center;
   background-size: cover;
   display: flex;
   min-height: 100vh;
@@ -27,18 +27,18 @@ body > .container {
 button, input[type="submit"], .btn {
   font-size: 1.5rem !important;
   color: white;
-  background: #0097c7cc;
+  background: #864cb3db;
   box-shadow: none;
   border-radius: 2px;
 }
 
 button:hover, input[type="submit"]:hover, .btn:hover {
-  background: #0D546B;
+  background: #5e258adb;
 }
 
 nav {
   box-shadow: none;
-  background-color: #0D546B;
+  background-color: #5e258adb;
 }
 
 nav .brand-logo {
@@ -186,11 +186,11 @@ form li {
 }
 
 .panel-wrapper .panel .login, .panel-wrapper .panel-main .login {
-  background-color: #0097c7cc;
+  background-color: #864cb3db;
 }
 
 .panel-wrapper .panel .login:hover, .panel-wrapper .panel-main .login:hover {
-  background-color: #0D546Bcc;
+  background-color: #5e258adb;
 }
 
 .panel-wrapper .panel .signin, .panel-wrapper .panel-main .signin {

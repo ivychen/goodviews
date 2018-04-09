@@ -113,9 +113,11 @@ def index():
     # DEBUG: this is debugging code to see what request looks like
     print(request.args)
 
+    if current_user.is_authenticated():
+        return redirect(url_for('main'))
+
     # render_template looks in the templates/ folder for files.
     # for example, the below file reads template/index.html
-    #
     return render_template("index.html")
 
 #
@@ -168,12 +170,17 @@ def another():
     return render_template("another.html", **context)
 
 
+@app.route('/main')
+@login_required
+def main():
+    return redirect(url_for('another'))
+
 # Example of adding new data to the database
 @app.route('/add', methods=['POST'])
 def add():
     name = request.form['name']
     g.conn.execute('INSERT INTO test(name) VALUES (%s)', name)
-    return redirect('/')
+    return redirect('/another')
 
 # === LOGIN ====
 @login_manager.user_loader
@@ -207,7 +214,7 @@ def login():
 
         if authenticate_user(test_user):
             login_user(test_user)
-            return redirect('/')
+            return redirect(url_for('main'))
         else:
             error = 'Invalid Credentials. Please try again.'
 
@@ -233,7 +240,7 @@ def register():
         if (not is_registered_user(new_user)):
             register_user(new_user)
             login_user(new_user)
-            return redirect('/')
+            return redirect(url_for('main'))
         else:
             error = "Username or email taken."
 
