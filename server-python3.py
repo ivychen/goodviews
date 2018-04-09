@@ -113,6 +113,20 @@ def index():
     # DEBUG: this is debugging code to see what request looks like
     print(request.args)
 
+    # render_template looks in the templates/ folder for files.
+    # for example, the below file reads template/index.html
+    #
+    return render_template("index.html")
+
+#
+# This is an example of a different path.  You can see it at:
+#
+#     localhost:8111/another
+#
+# Notice that the function name is another() rather than index()
+# The functions for each app.route need to have different names
+@app.route('/another')
+def another():
 
     #
     # example of a database query
@@ -149,26 +163,9 @@ def index():
     #     <div>{{n}}</div>
     #     {% endfor %}
     #
-    context = dict(data = names)
+    context = dict(data=names)
 
-
-    #
-    # render_template looks in the templates/ folder for files.
-    # for example, the below file reads template/index.html
-    #
-    return render_template("index.html", **context)
-
-#
-# This is an example of a different path.  You can see it at:
-#
-#     localhost:8111/another
-#
-# Notice that the function name is another() rather than index()
-# The functions for each app.route need to have different names
-#
-@app.route('/another')
-def another():
-    return render_template("another.html")
+    return render_template("another.html", **context)
 
 
 # Example of adding new data to the database
@@ -244,7 +241,7 @@ def register():
 
 def register_user(user):
     cursor = g.conn.execute("INSERT INTO Users (username, password, email) VALUES (%s, %s, %s)", (user.username, user.password, user.email))
-    
+
     cursor.close()
 
 def is_registered_user(user):
@@ -286,7 +283,7 @@ if __name__ == "__main__":
             python server.py --help
 
         """
-        
+
         # App configuration for flask-login
         app.secret_key = 'gravano'
 
