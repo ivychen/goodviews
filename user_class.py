@@ -1,8 +1,8 @@
-import main
-import datetime
+"""User class definition.
+"""
 
 class User():
-  def __init__(self , username, password , email=None):
+  def __init__(self , username, password , email=None, uid=None):
     if username == "":
       raise ValueError("Username cannot be empty")
 
@@ -12,6 +12,7 @@ class User():
     self.username = username
     self.password = password
     self.email = email
+    self.uid = uid
  
   def is_authenticated(self):
     return True
@@ -23,7 +24,10 @@ class User():
     return False
  
   def get_id(self):
-    return unicode(self.id)
+    if self.uid:
+      return str(self.uid)
+      
+    return str(self.username)
 
   def __repr__(self):
     return '<User %r>' % (self.username)

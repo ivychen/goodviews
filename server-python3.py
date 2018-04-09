@@ -12,7 +12,7 @@ import os
   # accessible as a variable in index.html:
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response
+from flask import Flask, url_for, request, render_template, g, redirect, Response
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 # Import custom modules
@@ -181,21 +181,23 @@ def add():
 # === LOGIN ====
 @login_manager.user_loader
 def load_user(username):
-    cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username='" + user.username + "'")
+    cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username='" + username + "'")
     data = cursor.fetchone()
     cursor.close()
 
+    print(data)
+
     if data is None:
         return None
-    print(data, User(*data))
-    return User(*data)
+
+    return User(data[1], data[2], data[3], data[0])
 
 def authenticate_user(user):
     cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username='" + user.username + "'")
     data = cursor.fetchone()
     cursor.close()
 
-    if data[1] == user.password:
+    if data[2] == user.password:
         return True
     else:
         return False
@@ -208,7 +210,7 @@ def login():
 
         if authenticate_user(test_user):
             login_user(test_user)
-            return redirect(url_for('home'))
+            return redirect('/')
         else:
             error = 'Invalid Credentials. Please try again.'
 
@@ -232,6 +234,7 @@ def register():
             error = "Username or Password is empty"
 
         if (not is_registered_user(new_user)):
+            register_user(new_user)
             login_user(new_user)
             return redirect('/')
         else:
@@ -239,9 +242,13 @@ def register():
 
     return render_template('register.html', error=error)
 
+def register_user(user):
+    cursor = g.conn.execute('INSERT INTO Users (username, password, email) VALUES (%s, %s, %s)', user.username, user.password, user.email)
+
+    cursor.close()
 
 def is_registered_user(user):
-    cursor = g.conn.execute('SELECT * FROM Users U WHERE U.username="' + user.username + '"')
+    cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username='%s'", user.username)
     for res in cursor:
         print(list(cursor))
     data = cursor.fetchone()
@@ -282,6 +289,9 @@ if __name__ == "__main__":
             python server.py --help
 
         """
+        
+        # App configuration for flask-login
+        app.secret_key = 'gravano'
 
         HOST, PORT = host, port
         print("running on %s:%d" % (HOST, PORT))

@@ -3,3 +3,4 @@ flask
 psycopg2
 sqlalchemy
 click
+flask-login
