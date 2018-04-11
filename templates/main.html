@@ -2,17 +2,33 @@
 {% block title %} GoodViews {% endblock %}
 {% block body %}
 
-<h1>Some famous Computer Scientists</h1>
-<div>{{data}}</div>
+<h2>Movies</h2>
 
 <div>
-  {% for n in data %}
-  <div>{{n}}</div>
-  {% endfor %}
+  {% for mid, name, year, genre, runtime, overview in data %}
+	<div class="card medium">
+     <div class="card-content">
+			 <h5>{{ name }} ({{ year }})</h5>
+			 <p>Genre: {{ genre }} | Runtime: {{ runtime }}min</p>
+		 </div>
+		 <div class="card-tabs">
+		   <ul class="tabs tabs-fixed-width">
+				 <li class="tab"><a href="#overview-{{mid}}">Overview</a></li>
+				 <li class="tab"><a class="active" href="#test5-{{mid}}">Test 2</a></li>
+				 <li class="tab"><a href="#test6-{{mid}}">Test 3</a></li>
+			 </ul>
+		 </div>
+		 <div class="card-content grey lighten-4">
+			 <div id="overview-{{mid}}">{{ overview }}</div>
+			 <div id="test5-{{mid}}">Test 2</div>
+			 <div id="test6-{{mid}}">Test 3</div>
+     </div>
+	 </div>
+	{% endfor %}
 </div>
 
 <form method="POST" action="/add">
 <p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
 </form>
 
-{% endblock %}
+i{% endblock %}
