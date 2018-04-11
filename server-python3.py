@@ -112,6 +112,7 @@ def index():
 
     # DEBUG: this is debugging code to see what request looks like
     print(request.args)
+    print("Index path:", request.path)
 
     if current_user.is_authenticated:
         return redirect(url_for('main'))

@@ -22,7 +22,11 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
-<body>
+{% if request.path == "/login" or request.path == "/register" or request.path == "/" %}
+	<body>
+{% else %}
+	<body style="background: #fff;">
+{% endif %}
   <!-- Navigation Menu -->
   {% if current_user.is_authenticated() or request.path == "/login" or request.path == "/register" %}
   <header class="mdl-layout__header mdl-layout__header--transparent">
