@@ -12,6 +12,7 @@ $GVBLUE-BRIGHT: #1a87ab;
 $GVPURPLE: #864cb3db;
 $GVPURPLE-DARK: #5e258adb;
 $GVPURPLE-GRAD: #050015b3;
+$GVPURPLE-BRIGHT: #8336bfdb;
 
 body, html {
   height: 100%;
@@ -53,13 +54,28 @@ button, input[type="submit"], .btn {
   }
 }
 
+.tabs {
+  li.indicator {
+    padding-bottom: 0;
+  }
+}
+
+span.talent {
+  font-weight: bold;
+}
+
+p.rating {
+  // color: #888888;
+  color: $GVBLUE-BRIGHT;
+}
+
 // Navigation
 nav {
   box-shadow: none;
   background-color: $GVPURPLE-DARK;
 
   .brand-logo {
-    font-family: 'Allerta Stencil', Helvetica, sans-serif;
+    font-family: 'Roboto Slab', Helvetica, sans-serif;
     margin-left: 1rem;
   }
 }
@@ -71,7 +87,7 @@ ul.sidenav {
     }
 
     &:first-child {
-      background: $GVBLUE-BRIGHT;
+      background: $GVPURPLE-BRIGHT;
       color: white;
       padding: 1rem 0;
     }
@@ -183,7 +199,7 @@ form {
 
     .title {
       color: white;
-      font-family: 'Allerta Stencil', Helvetica, sans-serif;
+      font-family: 'Roboto Slab', Helvetica, sans-serif;
       font-size: 6rem;
     }
 

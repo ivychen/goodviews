@@ -14,52 +14,52 @@ Briefly describe two of the web pages that require (what you consider) the most 
 1. The PostgreSQL account where DB resides: ic2389
 2. URL of web application: [http://35.185.29.235:8111](http://35.185.29.235:8111)
 3. Features implemented:
-    - User login/registration
+    - User:
+        - User may login/register for an account
+        - Users REVIEW Reviewable (Movies, Theaters)
+    - Movies:
+        - Browse movie database on main page and easily view details on plot synopsis
+        - View Talent that STARS_IN Movies
+        - Movies ISA Reviewable, you can view reviews of movies
+    - Talent:
+        - View Talent that STARS_IN Movies
+    - Theaters:
+        - Theaters ISA Reviewable, you can view reviews of theaters
+    - Collections:
 
 TODO:
 - Application must provide a way to view or interact with all the entities and relationships in your final ER diagram
-- Browse films
-- Browse talent
-    - Plot synopsis
+- INSERT/UPDATE REVIEW
+- ADD TO NEW/EXISTING COLLECTION
+- CREATE THEATERS PAGE
+- CREATE COLLECTIONS PAGE
+- UPDATE navigation
 - Browse theaters
     - Browse showings at theaters
 - COLLECTIONS:
     - Allow users to create Collections
     - User can view their Collection
-- REVIEWS:
-    - Post reviews of films or theaters
 - Search for films based on year, genre or rating
 
 INTERACT WITH:
-- Users: login/registration
-- Reviewable
+- Reviewable Movies
+- Reviewable Theaters
 - TimeSlots
-- Collections
 - Talent
 
-Relationships
-- Talent STARS_IN Movies
+Relationships:
 - Theaters SHOW Movies at TimeSlots
 - Users BOOK (SHOWINGS of Movies in Theaters during TimeSlots)
-- Users REVIEW Reviewable
 - Users CREATE Collections
 - Collections CONTAIN Movies
-- Movies and Theaters ISA Reviewable (no overlap, with cover)
-2
+
 Additional Assumptions:
 - Users can BOOK multiple tickets, which may have different price points,
 depending on the Showing (based on Movie, Theater, and TimeSlot).
-- A User can only review a Movie or Theater once (thus, we can define
-Review as a relationship).
-- Talent can only star in a Movie as one predominant role.
 - Users create Collections with unique names that can contain zero or more
 movies.
-- Reviewable ratings are on an integer scale from 1 to 10.
 - Showings can be booked up to the Theater capacity (`seat_info` attribute).
 - TimeSlots can be before Movie release date (due to previews, etc.)
-- Collections are weak entity sets of Users, as the name of a Collection
-requires the user id to uniquely identify them. We allow multiple Users to
-create Collections with the same name (ie. “Watchlist”, “To Watch”, etc.).
 
 
 03-01-2018:
