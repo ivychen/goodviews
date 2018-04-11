@@ -46,6 +46,7 @@ span.talent {
 
 p.rating {
   color: #1a87ab;
+  text-transform: uppercase;
 }
 
 nav {

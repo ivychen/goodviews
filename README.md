@@ -45,7 +45,6 @@ INTERACT WITH:
 - Reviewable Movies
 - Reviewable Theaters
 - TimeSlots
-- Talent
 
 Relationships:
 - Theaters SHOW Movies at TimeSlots
