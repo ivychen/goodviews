@@ -2,6 +2,16 @@
 
 A cinema database and discussion platform.
 
+COMS4111 Introduction to Database Systems
+
+Prof. Luis Gravano
+
+TA Mentor: Kim Tao
+
+Team: Ivy Chen & Gregory Yap
+
+---
+
 ## Project 1 Part 3
 
 **Proposal Description:** Goodviews is a platform for cinema/theater information and ticket reservation. While sites such as IMDB and RottenTomatoes exist to provide audiences with the latest film, TV and celebrity content and allow users to post reviews of media content, they lack a sense of social community. Furthermore, existing platforms often lack coherence due to the variety of media content. In Goodviews, we aim to marry the best aspects of Goodreads and IMDB and create a digital community of film fans. We offer a more ​streamlined ​database by focusing on movies rather than TV shows or other media. Users can curate ​collections ​of movies (such as "Movies I Want To Watch"), browse actors and post ​reviews ​of movies. They will be able to search a ​robust database ​ for films based on year/genre/rating, browse
@@ -65,6 +75,8 @@ movies.
 - Showings can be booked up to the Theater capacity (`seat_info` attribute).
 - TimeSlots can be before Movie release date (due to previews, etc.)
 
+---
+
 ## Developer Walkthrough
 
 ### Set up Python 3 environment
@@ -87,6 +99,8 @@ pip install -r requirements.txt
 python server-python3.py
 ```
 
+---
+
 ## Project Feedback/Changelog
 
 03-01-2018:
@@ -95,13 +109,3 @@ python server-python3.py
 - Added `NOT NULL` and `CHECK` constraints
 - Replaced all instances of `CHAR` iwth `VARCHAR`
 - Converted unique identifiers (<id>) to `SERIAL` type, foreign keys still `INTEGER`
-
----
-
-COMS4111 Introduction to Database Systems
-
-Prof. Luis Gravano
-
-TA Mentor: Kim Tao
-
-Team: Ivy Chen & Gregory Yap
