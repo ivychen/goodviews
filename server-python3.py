@@ -223,6 +223,45 @@ def add():
     g.conn.execute('INSERT INTO test(name) VALUES (%s)', name)
     return redirect('/another')
 
+# === THEATERS ===
+@app.route('/theaters')
+@login_required
+def theaters():
+    # Query: Theaters
+    cursor = g.conn.execute("SELECT * FROM Theaters")
+    theaters = []
+    theaters = cursor.fetchall()
+    cursor.close()
+
+    # # Query: Talent
+    # cursor = g.conn.execute("SELECT T.tid, T.name, S.movieID, S.role FROM Talent T, Stars_In S WHERE T.tid = S.tid")
+    # talent = []
+    # talent = cursor.fetchall()
+    # cursor.close()
+
+    # # Query Reviews for all
+    # cursor = g.conn.execute("SELECT M.id, R.rating, R.text, to_char(R.review_date, 'Month DD, YYYY'), U.username FROM Movies M, Review R, Users U WHERE M.id = R.rid AND R.uid = U.uid ORDER BY R.review_date DESC")
+    # movie_reviews = []
+    # movie_reviews = cursor.fetchall()
+    # cursor.close()
+    #
+    # # Query Review aggregate
+    # cursor = g.conn.execute("SELECT M.id, ROUND(AVG(R.rating),2) FROM Movies M, Review R WHERE M.id = R.rid GROUP BY M.id")
+    # movie_ratings = []
+    # movie_ratings = cursor.fetchall()
+    # cursor.close()
+    #
+    # # Query this user's reviews
+    # cursor = g.conn.execute("SELECT DISTINCT M.id, R.rating, R.text, to_char(R.review_date, 'Month DD, YYYY') FROM Movies M, Review R, Users U WHERE M.id = R.rid AND R.uid=%s", current_user.uid)
+    # user_movie_reviews = []
+    # user_movie_reviews = cursor.fetchall()
+    # print(user_movie_reviews)
+    # cursor.close()
+
+    context = dict(theaters=theaters)
+
+    return render_template("theaters.html", **context)
+
 # === LOGIN ====
 @login_manager.user_loader
 def load_user(username):
