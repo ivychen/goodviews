@@ -54,6 +54,21 @@ button, input[type="submit"], .btn {
   }
 }
 
+a {
+  &.write-review-trigger {
+    float: right;
+  }
+}
+
+div.review-form {
+  width: 85%;
+
+  textarea {
+    height: 100%;
+    min-height: 300px;
+  }
+}
+
 .tabs {
   li.indicator {
     padding-bottom: 0;
@@ -67,6 +82,8 @@ span.talent {
 p.rating {
   // color: #888888;
   color: $GVBLUE-BRIGHT;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 // Navigation
