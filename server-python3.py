@@ -1,4 +1,3 @@
-
 """
 Columbia's COMS W4111.001 Introduction to Databases
 Example Webserver
@@ -25,7 +24,7 @@ app = Flask(__name__, template_folder=tmpl_dir)
 # Enable flask-login
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'index'
 
 #
 # The following is a dummy URI that does not connect to a valid database. You will need to modify it to connect to your Part 2 database in order to use the data.
@@ -129,15 +128,18 @@ def index():
 # Notice that the function name is main() rather than index()
 # The functions for each app.route need to have different names
 @app.route('/main')
+@login_required
 def main():
 
     #
     # example of a database query
     #
-    cursor = g.conn.execute("SELECT name FROM test")
-    names = []
+    # cursor = g.conn.execute("SELECT name FROM test")
+    cursor = g.conn.execute("SELECT * FROM Movies")
+
+    rows = []
     for result in cursor:
-        names.append(result['name'])  # can also be accessed using result[0]
+        rows.append(result)  # can also be accessed using result[0]
     cursor.close()
 
     #
@@ -166,15 +168,10 @@ def main():
     #     <div>{{n}}</div>
     #     {% endfor %}
     #
-    context = dict(data=names)
+    context = dict(data=rows)
 
     return render_template("main.html", **context)
 
-
-@app.route('/main')
-@login_required
-def main():
-    return redirect(url_for('another'))
 
 # Example of adding new data to the database
 @app.route('/add', methods=['POST'])
