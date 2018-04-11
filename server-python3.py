@@ -124,12 +124,12 @@ def index():
 #
 # This is an example of a different path.  You can see it at:
 #
-#     localhost:8111/another
+#     localhost:8111/main
 #
-# Notice that the function name is another() rather than index()
+# Notice that the function name is main() rather than index()
 # The functions for each app.route need to have different names
-@app.route('/another')
-def another():
+@app.route('/main')
+def main():
 
     #
     # example of a database query
@@ -168,7 +168,7 @@ def another():
     #
     context = dict(data=names)
 
-    return render_template("another.html", **context)
+    return render_template("main.html", **context)
 
 
 @app.route('/main')
