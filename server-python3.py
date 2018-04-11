@@ -131,18 +131,37 @@ def index():
 @login_required
 def main():
 
-    #
     # example of a database query
-    #
     # cursor = g.conn.execute("SELECT name FROM test")
-    cursor = g.conn.execute("SELECT * FROM Movies")
 
-    rows = []
-    for result in cursor:
-        rows.append(result)  # can also be accessed using result[0]
+    print(current_user)
+
+    # Query: Movies
+    cursor = g.conn.execute("SELECT * FROM Movies")
+    movies = []
+    movies = cursor.fetchall()
+    cursor.close()
+    # for result in cursor:
+    #     rows.append(result)  # can also be accessed using result[0]
+
+    # Query: Talent
+    cursor = g.conn.execute("SELECT T.tid, T.name, S.movieID, S.role FROM Talent T, Stars_In S WHERE T.tid = S.tid")
+    talent = []
+    talent = cursor.fetchall()
     cursor.close()
 
-    #
+    # Query Reviews for all
+    cursor = g.conn.execute("SELECT M.id, R.rating, R.text, to_char(R.review_date, 'Month DD, YYYY'), U.username FROM Movies M, Review R, Users U WHERE M.id = R.rid AND R.uid = U.uid ORDER BY R.review_date DESC")
+    movie_reviews = []
+    movie_reviews = cursor.fetchall()
+    cursor.close()
+
+    # Query Review aggregate
+    cursor = g.conn.execute("SELECT M.id, ROUND(AVG(R.rating),2) FROM Movies M, Review R WHERE M.id = R.rid GROUP BY M.id")
+    movie_ratings = []
+    movie_ratings = cursor.fetchall()
+    cursor.close()
+
     # Flask uses Jinja templates, which is an extension to HTML where you can
     # pass data to a template and dynamically generate HTML based on the data
     # (you can think of it as simple PHP)
@@ -168,7 +187,7 @@ def main():
     #     <div>{{n}}</div>
     #     {% endfor %}
     #
-    context = dict(data=rows)
+    context = dict(movies=movies, talent=talent, movie_reviews=movie_reviews, movie_ratings=movie_ratings)
 
     return render_template("main.html", **context)
 
@@ -186,8 +205,6 @@ def load_user(username):
     cursor = g.conn.execute("SELECT * FROM Users U WHERE U.username=%s", username)
     data = cursor.fetchone()
     cursor.close()
-
-    print(data)
 
     if data is None:
         return None

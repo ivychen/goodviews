@@ -5,30 +5,58 @@
 <h2>Movies</h2>
 
 <div>
-  {% for mid, name, year, genre, runtime, overview in data %}
-	<div class="card medium">
-     <div class="card-content">
-			 <h5>{{ name }} ({{ year }})</h5>
-			 <p>Genre: {{ genre }} | Runtime: {{ runtime }}min</p>
-		 </div>
-		 <div class="card-tabs">
-		   <ul class="tabs tabs-fixed-width">
-				 <li class="tab"><a href="#overview-{{mid}}">Overview</a></li>
-				 <li class="tab"><a class="active" href="#test5-{{mid}}">Test 2</a></li>
-				 <li class="tab"><a href="#test6-{{mid}}">Test 3</a></li>
-			 </ul>
-		 </div>
-		 <div class="card-content grey lighten-4">
-			 <div id="overview-{{mid}}">{{ overview }}</div>
-			 <div id="test5-{{mid}}">Test 2</div>
-			 <div id="test6-{{mid}}">Test 3</div>
-     </div>
-	 </div>
-	{% endfor %}
+  {% for mid, name, year, genre, runtime, overview in movies %}
+  <div class="card">
+    <div class="card-content">
+      <p class="rating">Community Rating:
+      {% for movie_rid, avg_rating in movie_ratings %}
+        {% if movie_rid == mid %}
+        {{ avg_rating }}
+        {% endif %}
+      {% endfor %}
+      </p>
+      <h5>{{ name }} ({{ year }})</h5>
+      <p>Genre: {{ genre }} | Runtime: {{ runtime }}min</p>
+    </div>
+    <div class="card-tabs">
+      <ul class="tabs tabs-fixed-width">
+        <li class="tab"><a class="active" href="#overview-{{mid}}">Overview</a></li>
+        <li class="tab"><a href="#talent-{{mid}}">Talent</a></li>
+        <li class="tab"><a href="#review-{{mid}}">Reviews</a></li>
+      </ul>
+    </div>
+    <div class="card-content grey lighten-4">
+      <div id="overview-{{mid}}">{{ overview }}</div>
+      <div id="talent-{{mid}}">
+        <h6>Cast and Crew</h6>
+        <ul>
+          {% for tid, tname, movieID, role in talent %}
+            {% if movieID == mid %}
+              <li><span class="talent">{{ tname }}</span> as {{ role }}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div id="review-{{mid}}">
+        <h6>Reviews</h6>
+        {% for movieID, rating, review_text, review_date, review_username in movie_reviews %}
+          {% if movieID == mid %}
+          <div class="card-panel deep-purple">
+            <p class="white-text">By <b>{{ review_username }}</b></p>
+            <span class="white-text">Rating: {{ rating }} | Date: {{ review_date }}</span>
+            <hr />
+            <p class="white-text">{{ review_text }}</p>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 </div>
 
 <form method="POST" action="/add">
-<p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
+  <p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
 </form>
 
 i{% endblock %}

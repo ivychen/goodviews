@@ -85,9 +85,9 @@ CREATE TABLE Book (
 
 CREATE TABLE Review (
     	rid	   	INTEGER,
-    	uid 	   	INTEGER,
-	rating 	   	INTEGER CHECK (rating >= 1 AND rating <= 10),
-	text	   	TEXT,
+    	uid 	  INTEGER,
+			rating 	INTEGER CHECK (rating >= 1 AND rating <= 10),
+			text	  TEXT,
 	review_date	TIMESTAMP WITHOUT TIME ZONE NOT NULL,
 	PRIMARY KEY (rid, uid),
 	FOREIGN KEY (uid) REFERENCES Users

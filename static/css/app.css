@@ -36,13 +36,25 @@ button:hover, input[type="submit"]:hover, .btn:hover {
   background: #5e258adb;
 }
 
+.tabs li.indicator {
+  padding-bottom: 0;
+}
+
+span.talent {
+  font-weight: bold;
+}
+
+p.rating {
+  color: #1a87ab;
+}
+
 nav {
   box-shadow: none;
   background-color: #5e258adb;
 }
 
 nav .brand-logo {
-  font-family: 'Allerta Stencil', Helvetica, sans-serif;
+  font-family: 'Roboto Slab', Helvetica, sans-serif;
   margin-left: 1rem;
 }
 
@@ -51,7 +63,7 @@ ul.sidenav li h1, ul.sidenav li h2, ul.sidenav li h3, ul.sidenav li h4, ul.siden
 }
 
 ul.sidenav li:first-child {
-  background: #1a87ab;
+  background: #8336bfdb;
   color: white;
   padding: 1rem 0;
 }
@@ -147,7 +159,7 @@ form li {
 
 .panel-wrapper .panel .title, .panel-wrapper .panel-main .title {
   color: white;
-  font-family: 'Allerta Stencil', Helvetica, sans-serif;
+  font-family: 'Roboto Slab', Helvetica, sans-serif;
   font-size: 6rem;
 }
 
