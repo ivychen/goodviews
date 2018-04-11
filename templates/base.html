@@ -23,6 +23,37 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 <body>
+  <!-- Navigation Menu -->
+  {% if current_user.is_authenticated() or request.path == "/login" or request.path == "/register" %}
+  <header class="mdl-layout__header mdl-layout__header--transparent">
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-wrapper">
+        <a href="/" class="brand-logo">GoodViews</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+          {% if current_user.is_authenticated() %}
+          <li><a href="/main">Home</a></li>
+          <li><a href="logout">Logout</a></li>
+          {% else %}
+          <li><a href="/">Home</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <ul class="sidenav" id="mobile-demo">
+      {% if current_user.is_authenticated() %}
+      <li><h5>Hello {{ current_user.username }}</h5></li>
+      <li><a href="/main">Home</a></li>
+      <li><a href="logout">Logout</a></li>
+      {% else %}
+      <li><a href="/">Home</a></li>
+      {% endif %}
+    </ul>
+  </header>
+  {% endif %}
+
   <!-- Main content -->
 	<div class="container">
 		{% block body %}{% endblock %}
