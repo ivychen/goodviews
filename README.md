@@ -23,6 +23,7 @@ Briefly describe two of the web pages that require (what you consider) the most 
         - Browse movie database on main page and easily view details on plot synopsis
         - View Talent that STARS_IN Movies
         - Movies ISA Reviewable, you can view reviews of movies
+        - Users can post/update REVIEW of Movies
     - Talent:
         - View Talent that STARS_IN Movies
     - Theaters:
@@ -35,7 +36,6 @@ Briefly describe two of the web pages that require (what you consider) the most 
     - `/collections_bookings` page
 
 TODO:
-- INSERT/UPDATE REVIEW
 - ADD TO NEW/EXISTING COLLECTION
 - CREATE THEATERS PAGE
 - CREATE COLLECTIONS PAGE
@@ -48,7 +48,6 @@ TODO:
 - Search for films based on year, genre or rating
 
 INTERACT WITH:
-- Reviewable Movies
 - Reviewable Theaters
 - TimeSlots
 
@@ -83,6 +82,9 @@ source env/bin/activate
 
 cd goodviews
 pip install -r requirements.txt
+
+# Start server on IPADDRESS:8111, navigate on browser
+python server-python3.py
 ```
 
 ## Project Feedback/Changelog

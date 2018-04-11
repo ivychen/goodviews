@@ -8,6 +8,7 @@ A debugger such as "pdb" may be helpful for debugging.
 Read about it online.
 """
 import os
+from datetime import datetime
   # accessible as a variable in index.html:
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
@@ -16,6 +17,7 @@ from flask_login import LoginManager, login_required, login_user, logout_user, c
 
 # Import custom modules
 from user_class import User
+
 
 # Create app
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -162,6 +164,13 @@ def main():
     movie_ratings = cursor.fetchall()
     cursor.close()
 
+    # Query this user's reviews
+    cursor = g.conn.execute("SELECT DISTINCT M.id, R.rating, R.text, to_char(R.review_date, 'Month DD, YYYY') FROM Movies M, Review R, Users U WHERE M.id = R.rid AND R.uid=%s", current_user.uid)
+    user_movie_reviews = []
+    user_movie_reviews = cursor.fetchall()
+    print(user_movie_reviews)
+    cursor.close()
+
     # Flask uses Jinja templates, which is an extension to HTML where you can
     # pass data to a template and dynamically generate HTML based on the data
     # (you can think of it as simple PHP)
@@ -187,15 +196,30 @@ def main():
     #     <div>{{n}}</div>
     #     {% endfor %}
     #
-    context = dict(movies=movies, talent=talent, movie_reviews=movie_reviews, movie_ratings=movie_ratings)
+    context = dict(movies=movies, talent=talent, movie_reviews=movie_reviews, movie_ratings=movie_ratings, user_movie_reviews=user_movie_reviews, uid=current_user.uid)
 
     return render_template("main.html", **context)
+
+
+@app.route('/write_review', methods=['POST'])
+def write_review():
+    uid = current_user.uid
+    review_date = datetime.now()
+
+    # Upsert bc no PostgreSQL 9.5
+    result = g.conn.execute("UPDATE Review SET rating=%s, text=%s, review_date=%s WHERE uid=%s AND rid=%s", request.form['rating'], request.form['text'], review_date, uid, request.form['rid'])
+
+    if result.rowcount == 0:
+        g.conn.execute("INSERT INTO Review (rid, uid, rating, text, review_date) VALUES (%s, %s, %s, %s, %s)", request.form['rid'], uid, request.form['rating'], request.form['text'], review_date)
+
+    return redirect('/main')
 
 
 # Example of adding new data to the database
 @app.route('/add', methods=['POST'])
 def add():
     name = request.form['name']
+    print(name)
     g.conn.execute('INSERT INTO test(name) VALUES (%s)', name)
     return redirect('/another')
 

@@ -8,6 +8,9 @@
   {% for mid, name, year, genre, runtime, overview in movies %}
   <div class="card">
     <div class="card-content">
+      <!-- Modal trigger for writing review -->
+      <a class="waves-effect waves-light btn-small modal-trigger write-review-trigger" href="#write-review-{{mid}}">Write Review</a>
+      <!-- Community Rating -->
       <p class="rating">Community Rating:
       {% for movie_rid, avg_rating in movie_ratings %}
         {% if movie_rid == mid %}
@@ -15,6 +18,61 @@
         {% endif %}
       {% endfor %}
       </p>
+      <!-- Modal: Write Review -->
+      <div id="write-review-{{mid}}" class="modal">
+        <div class="modal-content">
+          <h4>Write a Review for: {{ name }} ({{ year }})</h4>
+          <form method="POST" action="/write_review" class="col s12">
+            <div class="row review-form">
+              <!-- Review: rid (hidden) -->
+              <div class="input-field col s12 hide">
+                <input value="{{ mid }}" id="rid-{{mid}}" name="rid" type="text" class="validate">
+                <label for="rid-{{mid}}">rid</label>
+              </div>
+              <!-- Review: rating -->
+              {% set vars = {'rate': 0, 'lastdate': None} %}
+              {% for movieID, mRating, mText, mDate in user_movie_reviews %}
+                {% if mid == movieID %}
+                  {% if vars.update({'rate': mRating, 'lastdate': mDate}) %}{% endif %}
+                {% endif %}
+              {% endfor %}
+              {% if vars.lastdate %}<p>Last Reviewed: {{ vars.lastdate }}{% endif %}
+              <div class="input-field col s12">
+                <select name="rating">
+                  <option value="" disabled selected>Choose your rating</option>
+                  <option value="1" {% if vars.rate == 1 %}selected="selected"{% endif %}>1</option>
+                  <option value="2" {% if vars.rate == 2 %}selected="selected"{% endif %}>2</option>
+                  <option value="3" {% if vars.rate == 3 %}selected="selected"{% endif %}>3</option>
+                  <option value="4" {% if vars.rate == 4 %}selected="selected"{% endif %}>4</option>
+                  <option value="5" {% if vars.rate == 5 %}selected="selected"{% endif %}>5</option>
+                  <option value="6" {% if vars.rate == 6 %}selected="selected"{% endif %}>6</option>
+                  <option value="7" {% if vars.rate == 7 %}selected="selected"{% endif %}>7</option>
+                  <option value="8" {% if vars.rate == 8 %}selected="selected"{% endif %}>8</option>
+                  <option value="9" {% if vars.rate == 9 %}selected="selected"{% endif %}>9</option>
+                  <option value="10" {% if vars.rate == 10 %}selected="selected"{% endif %}>10</option>
+                </select>
+                <label>Rating</label>
+              </div>
+              <!-- Review: text -->
+              <div class="input-field col s12">
+                {% set vars = {'textPlaceholder': False} %}
+                {% for movieID, mRating, mText, mDate in user_movie_reviews %}
+                  {% if mid == movieID %}
+                    {% if vars.update({'textPlaceholder': True, 'text': mText}) %}{% endif %}
+                  {% endif %}
+                {% endfor %}
+
+                <textarea placeholder="{% if vars.textPlaceholder %}{{ vars.text }}{% endif %}" id="textarea-{{mid}}" name="text" class="materialize-textarea"></textarea>
+                <label for="textarea-{{mid}}">Review</label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+              <button class="btn waves-effect waves-light" type="submit" name="write_review">Submit Review</button>
+            </div>
+          </form>
+        </div>
+      </div>
       <h5>{{ name }} ({{ year }})</h5>
       <p>Genre: {{ genre }} | Runtime: {{ runtime }}min</p>
     </div>
@@ -54,9 +112,9 @@
   </div>
   {% endfor %}
 </div>
-
+<!--
 <form method="POST" action="/add">
   <p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
-</form>
+</form> -->
 
-i{% endblock %}
+{% endblock %}
