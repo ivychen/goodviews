@@ -22,11 +22,18 @@ Briefly describe two of the web pages that require (what you consider) the most 
         - View Talent that STARS_IN Movies
         - Movies ISA Reviewable, you can view reviews of movies
     - Talent:
+        - View Talent that STARS_IN Movies
     - Theaters:
         - Theaters ISA Reviewable, you can view reviews of theaters
+    - Collections:
 
 TODO:
 - Application must provide a way to view or interact with all the entities and relationships in your final ER diagram
+- INSERT/UPDATE REVIEW
+- ADD TO NEW/EXISTING COLLECTION
+- CREATE THEATERS PAGE
+- CREATE COLLECTIONS PAGE
+- UPDATE navigation
 - Browse theaters
     - Browse showings at theaters
 - COLLECTIONS:
@@ -38,7 +45,6 @@ INTERACT WITH:
 - Reviewable Movies
 - Reviewable Theaters
 - TimeSlots
-- Collections
 - Talent
 
 Relationships:
@@ -54,9 +60,6 @@ depending on the Showing (based on Movie, Theater, and TimeSlot).
 movies.
 - Showings can be booked up to the Theater capacity (`seat_info` attribute).
 - TimeSlots can be before Movie release date (due to previews, etc.)
-- Collections are weak entity sets of Users, as the name of a Collection
-requires the user id to uniquely identify them. We allow multiple Users to
-create Collections with the same name (ie. “Watchlist”, “To Watch”, etc.).
 
 
 03-01-2018:
