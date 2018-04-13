@@ -4,3 +4,6 @@ psycopg2
 sqlalchemy
 click
 flask-login
+screen
+virtualenv
+virtualenvwrapper

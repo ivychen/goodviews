@@ -113,7 +113,6 @@ def index():
 
     # DEBUG: this is debugging code to see what request looks like
     print(request.args)
-    print("Index path:", request.path)
 
     if current_user.is_authenticated:
         return redirect(url_for('main'))
@@ -135,7 +134,6 @@ def main():
 
     # example of a database query
     # cursor = g.conn.execute("SELECT name FROM test")
-
     print(current_user)
 
     # Query: Movies
@@ -170,6 +168,12 @@ def main():
     user_movie_reviews = cursor.fetchall()
     cursor.close()
 
+    # Query: Collections
+    cursor = g.conn.execute("SELECT DISTINCT C.name, C.uid FROM CreateCollections C, Contain CO WHERE C.uid = CO.uid AND C.name = CO.name AND C.uid=%s ORDER BY C.name ASC", current_user.uid)
+    collections = []
+    collections = cursor.fetchall()
+    cursor.close()
+
     # Flask uses Jinja templates, which is an extension to HTML where you can
     # pass data to a template and dynamically generate HTML based on the data
     # (you can think of it as simple PHP)
@@ -195,7 +199,7 @@ def main():
     #     <div>{{n}}</div>
     #     {% endfor %}
     #
-    context = dict(movies=movies, talent=talent, movie_reviews=movie_reviews, movie_ratings=movie_ratings, user_movie_reviews=user_movie_reviews, uid=current_user.uid)
+    context = dict(movies=movies, talent=talent, movie_reviews=movie_reviews, movie_ratings=movie_ratings, user_movie_reviews=user_movie_reviews, uid=current_user.uid, collections=collections)
 
     return render_template("main.html", **context)
 
@@ -304,6 +308,35 @@ def collections():
     context = dict(collections=collections, collection_movies=collection_movies)
 
     return render_template("collections.html", **context)
+
+
+@app.route('/add_collection', methods=['POST'])
+def add_collection():
+    uid = current_user.uid
+
+    # Upsert bc no PostgreSQL 9.5
+    result = g.conn.execute("UPDATE Contain SET uid=%s WHERE uid=%s AND movieID=%s", uid, uid, request.form['movieID'])
+
+    if result.rowcount == 0:
+        g.conn.execute("INSERT INTO Contain (movieID, uid, name) VALUES(%s, %s, %s)", request.form['movieID'], uid, request.form['collection'])
+
+    return redirect('/main')
+
+
+@app.route('/create_collection', methods=['POST'])
+def create_collection():
+    uid = current_user.uid
+
+    print(request.form)
+
+    # Upsert bc no PostgreSQL 9.5
+    result = g.conn.execute("UPDATE CreateCollections SET uid=%s WHERE uid=%s AND name=%s", uid, request.form['collection'])
+
+    if result.rowcount == 0:
+        g.conn.execute("INSERT INTO CreateCollections (name, uid) VALUES(%s, %s)", request.form['collection'], uid)
+
+    return redirect('/collections')
+
 
 # === LOGIN ====
 @login_manager.user_loader

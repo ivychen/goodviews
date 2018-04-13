@@ -10,6 +10,8 @@
     <div class="card-content">
       <!-- Modal trigger for writing review -->
       <a class="waves-effect waves-light btn-small modal-trigger write-review-trigger" href="#write-review-{{mid}}">Write Review</a>
+      <!-- Modal trigger for adding to Collection -->
+      <a class="waves-effect waves-light btn-small red lighten-2 modal-trigger write-review-trigger" href="#add-collect-{{mid}}">Add to Collection</a>
       <!-- Community Rating -->
       <p class="rating">Community Rating:
       {% for movie_rid, avg_rating in movie_ratings %}
@@ -69,6 +71,40 @@
             <div class="modal-footer">
               <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
               <button class="btn waves-effect waves-light" type="submit" name="write_review">Submit Review</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Modal for Collections -->
+      <div id="add-collect-{{mid}}" class="modal">
+        <div class="modal-content">
+          <h4>Add to Collection</h4>
+
+          <form method="POST" action="/add_collection" class="col s12">
+            <div class="row review-form">
+              <!-- Booking (hidden) -->
+
+              <p>Adding movie: {{name}} ({{year}})</p>
+
+              <div class="input-field col s12 hide">
+                <input value="{{ mid }}" id="mid-{{mid}}" name="movieID" type="text" class="validate">
+                <label for="mid-{{mid}}">Movie ID</label>
+              </div>
+
+              <div class="input-field col s12">
+                <select name="collection">
+                  <option value="" disabled selected>Choose Collection</option>
+                  {% for collect_name, collect_id in collections %}
+                    <option value="{{collect_name}}">{{collect_name}}</option>
+                  {% endfor %}
+                </select>
+                <label>Choose Colllection</label>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <a href="" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+              <button class="btn waves-effect waves-light red lighten-2" type="submit" name="add_collection">Add to Collection</button>
             </div>
           </form>
         </div>
