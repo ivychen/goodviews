@@ -211,7 +211,9 @@ def write_review():
     if result.rowcount == 0:
         g.conn.execute("INSERT INTO Review (rid, uid, rating, text, review_date) VALUES (%s, %s, %s, %s, %s)", request.form['rid'], uid, request.form['rating'], request.form['text'], review_date)
 
-    print("Review for", request.referrer, request.path)
+    if "theaters" in request.referrer:
+        return redirect('/theaters')
+        
     return redirect('/main')
 
 
