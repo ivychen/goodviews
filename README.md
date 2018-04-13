@@ -39,6 +39,7 @@ Your application's web interface does not need to be beautiful or sophisticated.
         - View Talent that STARS_IN Movies
         - Movies ISA Reviewable, you can view reviews of movies
         - Users can post/update REVIEW of Movies
+				- Users can search for Movies by name, year or genre
     - Talent:
         - View Talent that STARS_IN Movies
     - Theaters:
@@ -56,14 +57,8 @@ Your application's web interface does not need to be beautiful or sophisticated.
 4. Features Not Implemented:
     - NA
 5. Two web pages that require the most interesting database queries:
-    - `/main` page shows Movies in the database, allows User to browse movies and information such as year, genre, runtime and overview. It shows the Talent that stars in a given movie and Reviews for each movie. On this page, we allow users to write reviews by inputing a rating and review text, which INSERTs a review tuple (or UPDATE it if a review for a movie by the current user already exists). In addition, if a user's review already exists for the movie, the form actually shows the previous review. This page is interesting because it shows a lot of information on movies, stars in each movie, and offers functionality for both browsing other users' reviews and writing reviews.
+    - `/main` page shows Movies in the database, allows User to browse movies and information such as year, genre, runtime and overview. It shows the Talent that stars in a given movie and Reviews for each movie. On this page, we allow users to write reviews by inputing a rating and review text, which INSERTs a review tuple (or UPDATE it if a review for a movie by the current user already exists). In addition, if a user's review already exists for the movie, the form actually shows the previous review. This page is interesting because it shows a lot of information on movies, stars in each movie, and offers functionality for both browsing other users' reviews and writing reviews. Users are also able to search for movies by name, year or genre.
     - `/theaters` page shows Theaters in the database, displays information such as address, contact info and seat capacity. It shows the Showings at each Theater and allows Users to Book tickets using a form that INSERTs a Book tuple (if it exists, UPDATE the booking). In addition, the page shows the User's existing ticket Bookings. We also display the Reviews for each Theater and allow the User to write a review for each Theater (which inserts a rating and review text, or updates the existing review if it already exists). This page is interesting becuase it offers information on theaters, movie showings at each theater, reviews for theaters, the user's movie showing bookings, and offers functionality for booking showings and writing reviews on the same page.
-
-TODO:
-- Search for films based on year, genre or rating
-
-Relationships:
-- Users CREATE Collections
 
 ---
 
