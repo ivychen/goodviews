@@ -5,13 +5,123 @@
 <h2>Theaters</h2>
 
 <div>
-  {% for mid, name, year, genre, runtime, overview in movies %}
+  {% for tid, name, address, seat_info, contact, zip in theaters %}
   <div class="card">
     <div class="card-content">
+      <!-- Modal trigger for writing review -->
+      <a class="waves-effect waves-light btn-small modal-trigger write-review-trigger" href="#write-review-{{tid}}">Write Review</a>
+      <!-- Community Rating -->
+      <p class="rating">Community Rating:
+        {% for theater_rid, avg_rating in theater_ratings %}
+        {% if theater_rid == tid %}
+        {{ avg_rating }}
+        {% endif %}
+        {% endfor %}
+      </p>
+      <!-- Modal: Write Review -->
+      <div id="write-review-{{tid}}" class="modal">
+        <div class="modal-content">
+          <h4>Write a Review for: {{ name }}</h4>
+          <p>Address: {{ address }}</p>
+          <form method="POST" action="/write_review" class="col s12">
+            <div class="row review-form">
+              <!-- Review: rid (hidden) -->
+              <div class="input-field col s12 hide">
+                <input value="{{ tid }}" id="rid-{{tid}}" name="rid" type="text" class="validate">
+                <label for="rid-{{tid}}">rid</label>
+              </div>
+              <!-- Review: rating -->
+              {% set vars = {'rate': 0, 'lastdate': None} %}
+              {% for theaterID, tRating, tText, tDate in user_theater_reviews %}
+                {% if tid == theaterID %}
+                  {% if vars.update({'rate': tRating, 'lastdate': tDate}) %}{% endif %}
+                {% endif %}
+              {% endfor %}
+              {% if vars.lastdate %}<p>Last Reviewed: {{ vars.lastdate }}{% endif %}
+                <div class="input-field col s12">
+                  <select name="rating">
+                    <option value="" disabled selected>Choose your rating</option>
+                    <option value="1" {% if vars.rate == 1 %}selected="selected"{% endif %}>1</option>
+                    <option value="2" {% if vars.rate == 2 %}selected="selected"{% endif %}>2</option>
+                    <option value="3" {% if vars.rate == 3 %}selected="selected"{% endif %}>3</option>
+                    <option value="4" {% if vars.rate == 4 %}selected="selected"{% endif %}>4</option>
+                    <option value="5" {% if vars.rate == 5 %}selected="selected"{% endif %}>5</option>
+                    <option value="6" {% if vars.rate == 6 %}selected="selected"{% endif %}>6</option>
+                    <option value="7" {% if vars.rate == 7 %}selected="selected"{% endif %}>7</option>
+                    <option value="8" {% if vars.rate == 8 %}selected="selected"{% endif %}>8</option>
+                    <option value="9" {% if vars.rate == 9 %}selected="selected"{% endif %}>9</option>
+                    <option value="10" {% if vars.rate == 10 %}selected="selected"{% endif %}>10</option>
+                  </select>
+                  <label>Rating</label>
+                </div>
+                <!-- Review: text -->
+                <div class="input-field col s12">
+                  {% set vars = {'textPlaceholder': False} %}
+                  {% for theaterID, tRating, tText, tDate in user_theater_reviews %}
+                    {% if tid == theaterID %}
+                      {% if vars.update({'textPlaceholder': True, 'text': tText}) %}{% endif %}
+                    {% endif %}
+                  {% endfor %}
 
+                  <textarea placeholder="{% if vars.textPlaceholder %}{{ vars.text }}{% endif %}" id="textarea-{{tid}}" name="text" class="materialize-textarea"></textarea>
+                  <label for="textarea-{{tid}}">Review</label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <a href="" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+                <button class="btn waves-effect waves-light" type="submit" name="write_review">Submit Review</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <h5>{{ name }}</h5>
+        <p>Located at: {{ address }}, {{ zip }}</p>
+      </div>
+      <div class="card-tabs">
+        <ul class="tabs tabs-fixed-width">
+          <li class="tab"><a class="active" href="#overview-{{tid}}">Information</a></li>
+          <li class="tab"><a href="#talent-{{tid}}">Film Showings</a></li>
+          <li class="tab"><a href="#review-{{tid}}">Reviews</a></li>
+        </ul>
+      </div>
+      <div class="card-content grey lighten-4">
+        <div id="overview-{{tid}}">
+          <h6>Information</h6>
+          <p>Address: {{ address }}</p>
+          <p>Seat Capacity: {{ seat_info }}</p>
+          <p>Contact: {{ contact }}</p>
+        </div>
+        <div id="talent-{{tid}}">
+          <h6>Film Showings</h6>
+          <ul>
+          {% for mid, thid, movie_name, movie_year, movie_genre, movie_runtime, movie_overview, when in movie_showings %}
+            {% if thid == tid %}
+              <li>
+                <p><span class="showing">WHEN: {{ when }}</span></p>
+                <span class="showing">{{ movie_name }} ({{ movie_year }})</span>
+                <p>{{ movie_genre }} | {{ movie_runtime }}min</p>
+                <p>Overview: {{ overview }}</p>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        </div>
+        <div id="review-{{tid}}">
+          <h6>Reviews</h6>
+          {% for theaterID, rating, review_text, review_date, review_username in theater_reviews %}
+          {% if theaterID == tid %}
+          <div class="card-panel deep-purple">
+            <p class="white-text">By <b>{{ review_username }}</b></p>
+            <span class="white-text">Rating: {{ rating }} | Date: {{ review_date }}</span>
+            <hr />
+            <p class="white-text">{{ review_text }}</p>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
     </div>
+    {% endfor %}
   </div>
-  {% endfor %}
-</div>
 
-{% endblock %}
+  {% endblock %}
