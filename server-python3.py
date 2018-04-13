@@ -274,7 +274,6 @@ def theaters():
 @app.route('/book_showing', methods=['POST'])
 def book_showing():
     uid = current_user.uid
-    print(request.form)
 
     # Upsert bc no PostgreSQL 9.5
     result = g.conn.execute("UPDATE Book SET num_seats=%s WHERE uid=%s AND movieID=%s AND theaterID=%s AND datetime = to_timestamp(%s, 'YYYY-MM-DD HH24:MI')", request.form['num_seats'], uid, request.form['movieID'], request.form['theaterID'], request.form['datetime'])
@@ -291,7 +290,18 @@ def book_showing():
 @app.route('/collections')
 @login_required
 def collections():
-    context = dict()
+    # Query: Collections
+    cursor = g.conn.execute("SELECT DISTINCT C.name, C.uid FROM CreateCollections C, Contain CO WHERE C.uid = CO.uid AND C.name = CO.name AND C.uid=%s ORDER BY C.name ASC", current_user.uid)
+    collections = []
+    collections = cursor.fetchall()
+    cursor.close()
+
+    cursor = g.conn.execute("SELECT C.name, C.uid, M.name, M.year FROM CreateCollections C, Contain CO, Movies M WHERE C.uid = CO.uid AND C.name = CO.name AND CO.movieID = M.id AND C.uid=%s ORDER BY M.year ASC", current_user.uid)
+    collection_movies = []
+    collection_movies = cursor.fetchall()
+    cursor.close()
+
+    context = dict(collections=collections, collection_movies=collection_movies)
 
     return render_template("collections.html", **context)
 
