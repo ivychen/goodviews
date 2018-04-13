@@ -38,6 +38,8 @@ Briefly describe two of the web pages that require (what you consider) the most 
         - View Talent that STARS_IN Movies
     - Theaters:
         - Theaters ISA Reviewable, you can view reviews of theaters
+        - Theaters SHOW Movies at TimeSlots
+        - Users can browse the selection of Showings of Movies for each Theater
     - Collections:
 4. Features Not Implemented:
     - Nothing!
@@ -47,11 +49,8 @@ Briefly describe two of the web pages that require (what you consider) the most 
 
 TODO:
 - ADD TO NEW/EXISTING COLLECTION
-- CREATE THEATERS PAGE
 - CREATE COLLECTIONS PAGE
 - UPDATE navigation
-- Browse theaters
-    - Browse showings at theaters
 - COLLECTIONS:
     - Allow users to create Collections
     - User can view their Collection
@@ -62,7 +61,6 @@ INTERACT WITH:
 - TimeSlots
 
 Relationships:
-- Theaters SHOW Movies at TimeSlots
 - Users BOOK (SHOWINGS of Movies in Theaters during TimeSlots)
 - Users CREATE Collections
 - Collections CONTAIN Movies
@@ -72,7 +70,6 @@ Additional Assumptions:
 depending on the Showing (based on Movie, Theater, and TimeSlot).
 - Users create Collections with unique names that can contain zero or more
 movies.
-- Showings can be booked up to the Theater capacity (`seat_info` attribute).
 - TimeSlots can be before Movie release date (due to previews, etc.)
 
 ---

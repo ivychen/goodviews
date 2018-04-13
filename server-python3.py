@@ -168,7 +168,6 @@ def main():
     cursor = g.conn.execute("SELECT DISTINCT M.id, R.rating, R.text, to_char(R.review_date, 'Month DD, YYYY') FROM Movies M, Review R, Users U WHERE M.id = R.rid AND R.uid=%s", current_user.uid)
     user_movie_reviews = []
     user_movie_reviews = cursor.fetchall()
-    print(user_movie_reviews)
     cursor.close()
 
     # Flask uses Jinja templates, which is an extension to HTML where you can
@@ -212,6 +211,7 @@ def write_review():
     if result.rowcount == 0:
         g.conn.execute("INSERT INTO Review (rid, uid, rating, text, review_date) VALUES (%s, %s, %s, %s, %s)", request.form['rid'], uid, request.form['rating'], request.form['text'], review_date)
 
+    print("Review for", request.referrer, request.path)
     return redirect('/main')
 
 
@@ -228,7 +228,7 @@ def add():
 @login_required
 def theaters():
     # Query: Theaters
-    cursor = g.conn.execute("SELECT * FROM Theaters")
+    cursor = g.conn.execute("SELECT * FROM Theaters T ORDER BY T.name")
     theaters = []
     theaters = cursor.fetchall()
     cursor.close()
@@ -239,26 +239,31 @@ def theaters():
     # talent = cursor.fetchall()
     # cursor.close()
 
-    # # Query Reviews for all
-    # cursor = g.conn.execute("SELECT M.id, R.rating, R.text, to_char(R.review_date, 'Month DD, YYYY'), U.username FROM Movies M, Review R, Users U WHERE M.id = R.rid AND R.uid = U.uid ORDER BY R.review_date DESC")
-    # movie_reviews = []
-    # movie_reviews = cursor.fetchall()
-    # cursor.close()
-    #
-    # # Query Review aggregate
-    # cursor = g.conn.execute("SELECT M.id, ROUND(AVG(R.rating),2) FROM Movies M, Review R WHERE M.id = R.rid GROUP BY M.id")
-    # movie_ratings = []
-    # movie_ratings = cursor.fetchall()
-    # cursor.close()
-    #
-    # # Query this user's reviews
-    # cursor = g.conn.execute("SELECT DISTINCT M.id, R.rating, R.text, to_char(R.review_date, 'Month DD, YYYY') FROM Movies M, Review R, Users U WHERE M.id = R.rid AND R.uid=%s", current_user.uid)
-    # user_movie_reviews = []
-    # user_movie_reviews = cursor.fetchall()
-    # print(user_movie_reviews)
-    # cursor.close()
+    # Query Reviews for all
+    cursor = g.conn.execute("SELECT T.id, R.rating, R.text, to_char(R.review_date, 'Month DD, YYYY'), U.username FROM Theaters T, Review R, Users U WHERE T.id = R.rid AND R.uid = U.uid ORDER BY R.review_date DESC")
+    theater_reviews = []
+    theater_reviews = cursor.fetchall()
+    cursor.close()
 
-    context = dict(theaters=theaters)
+    # Query Review aggregate
+    cursor = g.conn.execute("SELECT T.id, ROUND(AVG(R.rating),2) FROM Theaters T, Review R WHERE T.id = R.rid GROUP BY T.id")
+    theater_ratings = []
+    theater_ratings = cursor.fetchall()
+    cursor.close()
+
+    # Query this user's reviews for theaters
+    cursor = g.conn.execute("SELECT DISTINCT T.id, R.rating, R.text, to_char(R.review_date, 'Month DD, YYYY') FROM Theaters T, Review R, Users U WHERE T.id = R.rid AND R.uid=%s", current_user.uid)
+    user_theater_reviews = []
+    user_theater_reviews = cursor.fetchall()
+    cursor.close()
+
+    # Movie Showings at this Theater
+    cursor = g.conn.execute("SELECT M.id, T.id, M.name, M.year, M.genre, M.runtime, M.overview, to_char(S.datetime, 'Month DD, YYYY HH12:MI AM') FROM Theaters T, Movies M, Showing S WHERE T.id = S.theaterID AND M.id = S.movieID ORDER BY M.name ASC")
+    movie_showings = []
+    movie_showings = cursor.fetchall()
+    cursor.close()
+
+    context = dict(theaters=theaters, theater_reviews=theater_reviews, theater_ratings=theater_ratings, user_theater_reviews=user_theater_reviews, movie_showings=movie_showings)
 
     return render_template("theaters.html", **context)
 
