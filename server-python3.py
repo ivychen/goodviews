@@ -178,7 +178,7 @@ def main():
     cursor.close()
 
     # Query: Collections
-    cursor = g.conn.execute("SELECT DISTINCT C.name, C.uid FROM CreateCollections C, Contain CO WHERE C.uid = CO.uid AND C.name = CO.name AND C.uid=%s ORDER BY C.name ASC", current_user.uid)
+    cursor = g.conn.execute("SELECT DISTINCT C.name, C.uid FROM CreateCollections C WHERE C.uid=%s ORDER BY C.name ASC", current_user.uid)
     collections = []
     collections = cursor.fetchall()
     cursor.close()
@@ -294,7 +294,7 @@ def book_showing():
 @login_required
 def collections():
     # Query: Collections
-    cursor = g.conn.execute("SELECT DISTINCT C.name, C.uid FROM CreateCollections C, Contain CO WHERE C.uid = CO.uid AND C.name = CO.name AND C.uid=%s ORDER BY C.name ASC", current_user.uid)
+    cursor = g.conn.execute("SELECT DISTINCT C.name, C.uid FROM CreateCollections C WHERE C.uid=%s ORDER BY C.name ASC", current_user.uid)
     collections = []
     collections = cursor.fetchall()
     cursor.close()
@@ -329,7 +329,7 @@ def create_collection():
     print(request.form)
 
     # Upsert bc no PostgreSQL 9.5
-    result = g.conn.execute("UPDATE CreateCollections SET uid=%s WHERE uid=%s AND name=%s", uid, request.form['collection'])
+    result = g.conn.execute("UPDATE CreateCollections SET uid=%s WHERE uid=%s AND name=%s", uid, uid, request.form['collection'])
 
     if result.rowcount == 0:
         g.conn.execute("INSERT INTO CreateCollections (name, uid) VALUES(%s, %s)", request.form['collection'], uid)
