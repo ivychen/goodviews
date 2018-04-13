@@ -2,6 +2,16 @@
 
 A cinema database and discussion platform.
 
+COMS4111 Introduction to Database Systems
+
+Prof. Luis Gravano
+
+TA Mentor: Kim Tao
+
+Team: Ivy Chen & Gregory Yap
+
+---
+
 ## Project 1 Part 3
 
 **Proposal Description:** Goodviews is a platform for cinema/theater information and ticket reservation. While sites such as IMDB and RottenTomatoes exist to provide audiences with the latest film, TV and celebrity content and allow users to post reviews of media content, they lack a sense of social community. Furthermore, existing platforms often lack coherence due to the variety of media content. In Goodviews, we aim to marry the best aspects of Goodreads and IMDB and create a digital community of film fans. We offer a more ​streamlined ​database by focusing on movies rather than TV shows or other media. Users can curate ​collections ​of movies (such as "Movies I Want To Watch"), browse actors and post ​reviews ​of movies. They will be able to search a ​robust database ​ for films based on year/genre/rating, browse
@@ -28,6 +38,8 @@ Briefly describe two of the web pages that require (what you consider) the most 
         - View Talent that STARS_IN Movies
     - Theaters:
         - Theaters ISA Reviewable, you can view reviews of theaters
+        - Theaters SHOW Movies at TimeSlots
+        - Users can browse the selection of Showings of Movies for each Theater
     - Collections:
 4. Features Not Implemented:
     - Nothing!
@@ -37,11 +49,8 @@ Briefly describe two of the web pages that require (what you consider) the most 
 
 TODO:
 - ADD TO NEW/EXISTING COLLECTION
-- CREATE THEATERS PAGE
 - CREATE COLLECTIONS PAGE
 - UPDATE navigation
-- Browse theaters
-    - Browse showings at theaters
 - COLLECTIONS:
     - Allow users to create Collections
     - User can view their Collection
@@ -52,7 +61,6 @@ INTERACT WITH:
 - TimeSlots
 
 Relationships:
-- Theaters SHOW Movies at TimeSlots
 - Users BOOK (SHOWINGS of Movies in Theaters during TimeSlots)
 - Users CREATE Collections
 - Collections CONTAIN Movies
@@ -62,8 +70,9 @@ Additional Assumptions:
 depending on the Showing (based on Movie, Theater, and TimeSlot).
 - Users create Collections with unique names that can contain zero or more
 movies.
-- Showings can be booked up to the Theater capacity (`seat_info` attribute).
 - TimeSlots can be before Movie release date (due to previews, etc.)
+
+---
 
 ## Developer Walkthrough
 
@@ -87,6 +96,8 @@ pip install -r requirements.txt
 python server-python3.py
 ```
 
+---
+
 ## Project Feedback/Changelog
 
 03-01-2018:
@@ -95,13 +106,3 @@ python server-python3.py
 - Added `NOT NULL` and `CHECK` constraints
 - Replaced all instances of `CHAR` iwth `VARCHAR`
 - Converted unique identifiers (<id>) to `SERIAL` type, foreign keys still `INTEGER`
-
----
-
-COMS4111 Introduction to Database Systems
-
-Prof. Luis Gravano
-
-TA Mentor: Kim Tao
-
-Team: Ivy Chen & Gregory Yap

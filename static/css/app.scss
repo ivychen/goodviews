@@ -75,7 +75,7 @@ div.review-form {
   }
 }
 
-span.talent {
+span.talent, span.showing {
   font-weight: bold;
 }
 
@@ -159,13 +159,10 @@ form {
   }
 }
 
-.card.horizontal {
-  .card-image {
-    img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-    }
+.card-content {
+  & > div > h6 {
+    text-transform: uppercase;
+    font-weight: bold;
   }
 }
 
