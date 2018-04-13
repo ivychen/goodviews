@@ -40,7 +40,10 @@ Briefly describe two of the web pages that require (what you consider) the most 
         - Theaters ISA Reviewable, you can view reviews of theaters
         - Theaters SHOW Movies at TimeSlots
         - Users can browse the selection of Showings of Movies for each Theater
-    - Collections:
+    - Collections
+    - Book:
+        - Users can view their Bookings
+        - Users BOOK (SHOWINGS of Movies in Theaters during TimeSlots)
 4. Features Not Implemented:
     - Nothing!
 5. Two web pages that require the most interesting database queries:
@@ -50,27 +53,18 @@ Briefly describe two of the web pages that require (what you consider) the most 
 TODO:
 - ADD TO NEW/EXISTING COLLECTION
 - CREATE COLLECTIONS PAGE
-- UPDATE navigation
 - COLLECTIONS:
     - Allow users to create Collections
     - User can view their Collection
 - Search for films based on year, genre or rating
 
-INTERACT WITH:
-- Reviewable Theaters
-- TimeSlots
-
 Relationships:
-- Users BOOK (SHOWINGS of Movies in Theaters during TimeSlots)
 - Users CREATE Collections
 - Collections CONTAIN Movies
 
 Additional Assumptions:
-- Users can BOOK multiple tickets, which may have different price points,
-depending on the Showing (based on Movie, Theater, and TimeSlot).
 - Users create Collections with unique names that can contain zero or more
 movies.
-- TimeSlots can be before Movie release date (due to previews, etc.)
 
 ---
 
