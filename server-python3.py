@@ -9,7 +9,7 @@ Read about it online.
 """
 import os
 from datetime import datetime
-  # accessible as a variable in index.html:
+# accessible as a variable in index.html:
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, url_for, request, render_template, g, redirect, Response
@@ -17,7 +17,6 @@ from flask_login import LoginManager, login_required, login_user, logout_user, c
 
 # Import custom modules
 from user_class import User
-
 
 # Create app
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -28,7 +27,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'index'
 
-#
+# Set default_price per seat
+default_price = 13.50
+
 # The following is a dummy URI that does not connect to a valid database. You will need to modify it to connect to your Part 2 database in order to use the data.
 #
 # XXX: The URI should be in the format of:
@@ -86,7 +87,7 @@ def teardown_request(exception):
         pass
 
 
-#
+
 # @app.route is a decorator around index() that means:
 #   run index() whenever the user tries to access the "/" path using a GET request
 #
@@ -98,7 +99,6 @@ def teardown_request(exception):
 #
 # see for routing: http://flask.pocoo.org/docs/0.10/quickstart/#routing
 # see for decorators: http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
-#
 @app.route('/')
 def index():
     """
@@ -213,7 +213,7 @@ def write_review():
 
     if "theaters" in request.referrer:
         return redirect('/theaters')
-        
+
     return redirect('/main')
 
 
@@ -230,16 +230,17 @@ def add():
 @login_required
 def theaters():
     # Query: Theaters
-    cursor = g.conn.execute("SELECT * FROM Theaters T ORDER BY T.name")
+    cursor = g.conn.execute("SELECT * FROM Theaters T ORDER BY T.name ASC")
     theaters = []
     theaters = cursor.fetchall()
     cursor.close()
 
-    # # Query: Talent
-    # cursor = g.conn.execute("SELECT T.tid, T.name, S.movieID, S.role FROM Talent T, Stars_In S WHERE T.tid = S.tid")
-    # talent = []
-    # talent = cursor.fetchall()
-    # cursor.close()
+    # Query: Movie Bookings for this user
+    cursor = g.conn.execute("SELECT M.name, M.year, T.name, T.zip, to_char(B.datetime, 'MM/DD/YYYY HH12:MI AM'), B.num_seats, ROUND(B.price::numeric, 2) FROM Theaters T, Movies M, Users U, Book B, Showing S WHERE T.id = B.theaterID AND M.id = B.movieID AND B.datetime = S.datetime AND B.movieID = S.movieID AND B.theaterID = S.theaterID AND B.uid = U.uid AND U.uid=%s ORDER BY B.datetime ASC", current_user.uid)
+    bookings = []
+    bookings = cursor.fetchall()
+
+    cursor.close()
 
     # Query Reviews for all
     cursor = g.conn.execute("SELECT T.id, R.rating, R.text, to_char(R.review_date, 'Month DD, YYYY'), U.username FROM Theaters T, Review R, Users U WHERE T.id = R.rid AND R.uid = U.uid ORDER BY R.review_date DESC")
@@ -260,14 +261,39 @@ def theaters():
     cursor.close()
 
     # Movie Showings at this Theater
-    cursor = g.conn.execute("SELECT M.id, T.id, M.name, M.year, M.genre, M.runtime, M.overview, to_char(S.datetime, 'Month DD, YYYY HH12:MI AM') FROM Theaters T, Movies M, Showing S WHERE T.id = S.theaterID AND M.id = S.movieID ORDER BY M.name ASC")
+    cursor = g.conn.execute("SELECT M.id, T.id, M.name, M.year, M.genre, M.runtime, M.overview, to_char(S.datetime, 'Month DD, YYYY HH12:MI AM'), to_char(S.datetime, 'MM-DD-YYYY'), to_char(S.datetime, 'YYYY-MM-DD HH24:MI') FROM Theaters T, Movies M, Showing S, TimeSlots TS WHERE T.id = S.theaterID AND M.id = S.movieID AND S.datetime = TS.datetime ORDER BY M.name ASC")
     movie_showings = []
     movie_showings = cursor.fetchall()
     cursor.close()
 
-    context = dict(theaters=theaters, theater_reviews=theater_reviews, theater_ratings=theater_ratings, user_theater_reviews=user_theater_reviews, movie_showings=movie_showings)
+    context = dict(theaters=theaters, theater_reviews=theater_reviews, theater_ratings=theater_ratings, user_theater_reviews=user_theater_reviews, movie_showings=movie_showings, bookings=bookings, default_price=default_price)
 
     return render_template("theaters.html", **context)
+
+
+@app.route('/book_showing', methods=['POST'])
+def book_showing():
+    uid = current_user.uid
+    print(request.form)
+
+    # Upsert bc no PostgreSQL 9.5
+    result = g.conn.execute("UPDATE Book SET num_seats=%s WHERE uid=%s AND movieID=%s AND theaterID=%s AND datetime = to_timestamp(%s, 'YYYY-MM-DD HH24:MI')", request.form['num_seats'], uid, request.form['movieID'], request.form['theaterID'], request.form['datetime'])
+
+    if result.rowcount == 0:
+        g.conn.execute("INSERT INTO Book (movieID, theaterID, datetime, uid, num_seats, price) VALUES (%s, %s, to_timestamp(%s, 'YYYY-MM-DD HH24:MI'), %s, %s, %s)", request.form['movieID'], request.form['theaterID'], request.form['datetime'], uid, request.form['num_seats'], (default_price * int(request.form['num_seats'])))
+
+    if "theaters" in request.referrer:
+        return redirect('/theaters')
+
+    return redirect('/main')
+
+
+@app.route('/collections')
+@login_required
+def collections():
+    context = dict()
+
+    return render_template("collections.html", **context)
 
 # === LOGIN ====
 @login_manager.user_loader

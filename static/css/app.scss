@@ -32,6 +32,7 @@ body {
 
   > .container {
     flex: 1 0 auto;
+    width: 90%;
   }
 }
 
@@ -56,6 +57,10 @@ button, input[type="submit"], .btn {
 
 a {
   &.write-review-trigger {
+    float: right;
+  }
+
+  &.book-button {
     float: right;
   }
 }
@@ -303,6 +308,10 @@ span.interest {
     .brand-logo {
       margin-left: 0;
     }
+  }
+
+  body > .container {
+    width: 90%;
   }
 }
 
