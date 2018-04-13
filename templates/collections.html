@@ -4,5 +4,29 @@
 
 <h2>My Collections</h2>
 
+{% for collect_name, cuid in collections %}
+<div class="card-panel deep-purple lighten-3 white-text">
+  <table class="highlight responsive-table">
+    <h2>{{collect_name}}</h2>
+    <thead>
+      <tr>
+          <th>Movie</th>
+          <th>Year</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for cname, cid, movie_name, movie_year in collection_movies %}
+      {% if cname == collect_name and cid == cuid %}
+      <tr>
+        <td>{{movie_name}}</td>
+        <td>{{movie_year}}</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endfor %}
 
 {% endblock %}
