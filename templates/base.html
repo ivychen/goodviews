@@ -40,6 +40,8 @@
           {% if current_user.is_authenticated %}
           <li><a href="/main">Home</a></li>
           <li><a href="/theaters">Theaters</a></li>
+          <li><a href="/theaters">My Bookings</a></li>
+          <li><a href="/collections">My Collections</a></li>
           <li><a href="logout">Logout</a></li>
           {% else %}
           <li><a href="/">Home</a></li>
@@ -53,6 +55,8 @@
       <li><h5>Hello {{ current_user.username }}</h5></li>
       <li><a href="/main">Home</a></li>
       <li><a href="/theaters">Theaters</a></li>
+      <li><a href="/theaters">My Bookings</a></li>
+      <li><a href="/collections">My Collections</a></li>
       <li><a href="logout">Logout</a></li>
       {% else %}
       <li><a href="/">Home</a></li>
