@@ -128,21 +128,30 @@ def index():
 #
 # Notice that the function name is main() rather than index()
 # The functions for each app.route need to have different names
-@app.route('/main')
+@app.route('/main', methods=['GET', 'POST'])
 @login_required
 def main():
-
     # example of a database query
     # cursor = g.conn.execute("SELECT name FROM test")
-    print(current_user)
 
-    # Query: Movies
-    cursor = g.conn.execute("SELECT * FROM Movies")
     movies = []
-    movies = cursor.fetchall()
-    cursor.close()
-    # for result in cursor:
-    #     rows.append(result)  # can also be accessed using result[0]
+    if bool(request.form):
+        mTitle = None if not request.form['mTitle'] else request.form['mTitle']
+
+        mYear = None if not request.form['mYear'] else int(request.form['mYear'])
+
+        mGenre = None if not request.form['mGenre'] else request.form['mGenre']
+
+        cursor = g.conn.execute("SELECT * FROM Movies M WHERE (%s is null OR M.name ILIKE %s) AND (%s is null or M.year = %s) AND (%s is null or M.genre ILIKE %s)", mTitle, mTitle, mYear, mYear, mGenre, mGenre)
+        movies = cursor.fetchall()
+        cursor.close()
+    else:
+        # Query: Movies
+        cursor = g.conn.execute("SELECT * FROM Movies")
+        movies = cursor.fetchall()
+        cursor.close()
+        # for result in cursor:
+        #     rows.append(result)  # can also be accessed using result[0]
 
     # Query: Talent
     cursor = g.conn.execute("SELECT T.tid, T.name, S.movieID, S.role FROM Talent T, Stars_In S WHERE T.tid = S.tid")
@@ -198,7 +207,6 @@ def main():
     #     {% for n in data %}
     #     <div>{{n}}</div>
     #     {% endfor %}
-    #
     context = dict(movies=movies, talent=talent, movie_reviews=movie_reviews, movie_ratings=movie_ratings, user_movie_reviews=user_movie_reviews, uid=current_user.uid, collections=collections)
 
     return render_template("main.html", **context)
@@ -219,15 +227,6 @@ def write_review():
         return redirect('/theaters')
 
     return redirect('/main')
-
-
-# Example of adding new data to the database
-@app.route('/add', methods=['POST'])
-def add():
-    name = request.form['name']
-    print(name)
-    g.conn.execute('INSERT INTO test(name) VALUES (%s)', name)
-    return redirect('/another')
 
 # === THEATERS ===
 @app.route('/theaters')

@@ -4,6 +4,28 @@
 
 <h2>Movies</h2>
 
+<form method="POST" action="/main" class="col s12">
+  <div class="row review-form">
+    <div class="input-field col s12 hide">
+      <input placeholder="True" id="search" name="search" type="text" class="validate">
+      <label>Search?</label>
+    </div>
+    <div class="input-field col s4">
+      <input placeholder="Title" id="search-title" name="mTitle" type="text" class="validate">
+      <label>Search title</label>
+    </div>
+    <div class="input-field col s4">
+      <input placeholder="Year" id="search-year" name="mYear" type="text" class="validate">
+      <label>Search year</label>
+    </div>
+    <div class="input-field col s4">
+      <input placeholder="Genre" id="search-genre" name="mGenre" type="text" class="validate">
+      <label>Search genre</label>
+    </div>
+    <button class="btn waves-effect waves-light red lighten-2 btn-small" type="submit" name="search">Search Movies</button>
+  </div>
+</form>
+
 <div>
   {% for mid, name, year, genre, runtime, overview in movies %}
   <div class="card">
